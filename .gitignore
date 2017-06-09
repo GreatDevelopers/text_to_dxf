@@ -1,0 +1,6 @@
+*.dxf
+*.txt
+*.pyc
+!samples/*.dxf
+!samples/*.txt
+
