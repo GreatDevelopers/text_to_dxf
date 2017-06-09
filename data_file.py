@@ -32,7 +32,7 @@ txt_sp=5                 # Spacing between lower point and 1st text line
 
 x_col=0                  # X co-ordinate position in input file (starting from 0)
 y_col=1                  # Y co-ordinate position in input file (starting from 0)
-r_col=2                  # radius in case if it is circle
+r_col=2                  # position of radius in input file (if C is the type)
 
 
 mode=1                   # 0 to draw figures by taking the co-ordinates values in 

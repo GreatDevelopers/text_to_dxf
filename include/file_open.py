@@ -53,5 +53,3 @@ foot_data=ft_file.read()
 out_file.write(head_data)
 
 lines = in_file.readlines()
-print 'Total lines:'
-print lines

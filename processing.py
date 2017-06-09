@@ -41,25 +41,8 @@ Yref_orig=Yref
 
 # Main loop start from here
 
-for line in lines:
-    print '\nInitial Variables:\n'
-    print 'points:',points
-    print 'data:', data
-    print 'object_id:', object_id
-    print 'index:', index
-    print 'first_line:', first_line
-    print 'update_ref:', update_ref
-    print 'description:', description
-    print 'shift_fac_count:', shift_fac_count
-    print 'shift factor:', shift_factor
-    print 'shift direction:', shift_direction
-    print 'Xref_orig:', Xref_orig
-    print 'Yref_orig:', Yref_orig
-    print 'mode:', mode
-    print 'scaleX:', scaleX
-    print 'scaleY:', scaleY
+for line in lines:    
     line=line.strip("\n")
-    print 'Working on line:', line
     if line=="":        # If line is empty then skip the line
         shift_fac_count+=1
         index+=1
@@ -67,7 +50,6 @@ for line in lines:
         update_ref=True
         continue
     line_data = line.split(col_delm)
-    print 'line_data:',line_data
     for value in line_data:
         if first_line==True: # Check if there is any description in first line or not
             if is_numeric(value)==False:
@@ -87,18 +69,16 @@ for line in lines:
         data[index]['text']=line_data[1]
         data[index]['show_line']=line_data[2]
         data[index]['layer']=line_data[3]
-        print 'data for figures with description:',data
         description=False
         continue
     elif first_line==True and description==False: # if description is not given
         first_line=False
         data.append({})
         points.append([])
-        data[index]['type']="L"
+        data[index]['type']="L"  # take line as default
         data[index]['text']="No TEXT"
         data[index]['show_line']="1"
         data[index]['layer']="0"
-        print 'data for figures with no description:', data
     
     # Update ref variables if required
     if mode==1 and update_ref==True:
@@ -115,10 +95,8 @@ for line in lines:
         else:
             if shift_direction==0:
                 Xref+=shiftX
-                print 'updated Xref:', Xref
             else:
                 Yref+=shiftY
-                print 'updated Yref:', Yref
     
     # Store line points in list
     if mode==0:
@@ -127,24 +105,21 @@ for line in lines:
     else:
         x=(Xref+float(line_data[x_col]))*scaleX
         y=(Yref+float(line_data[y_col]))*scaleY
+    
     if data[index]['type']=="L":
         points[index].append([x,y])
     elif data[index]['type']=="C":
         r=float(line_data[r_col])
         points[index].append([x,y,r])
-    print 'point', points
     
 # End of main loop
 
-# Following loop draws lines from the points given
+# Following loop draws lines if L is the type or circles if C is the type
 
 index=0
 for line_points in points:
-    print 'working on point group:', line_points
     i=0
-    
     if data[index]['type']=="L":
-        print '\n\nDrawing line...\n'
         while i<(len(line_points)-1):
             x1=line_points[i][0]
             y1=line_points[i][1]
@@ -155,7 +130,6 @@ for line_points in points:
                 object_id+=1
             i+=1 
     elif data[index]['type']=="C":
-        print '\n\nDrawing Circle...\n'
         while i<len(line_points):
             x=line_points[i][0]
             y=line_points[i][1]
@@ -167,7 +141,6 @@ for line_points in points:
     index+=1  
 
 # Following loop draws text if given by user in first line    
-print '\n\nDrawing text...\n'
 index=0
 for line_data in data:
     if line_data['text']=="NO TEXT" or line_data['show_line']=="0":
@@ -176,9 +149,14 @@ for line_data in data:
     else:
         x_values=[]
         y_values=[]
-        for point in  points[index]:
-            x_values.append(float(point[0]))
-            y_values.append(float(point[1]))
+        if data[index]['type']=="L":
+            for point in  points[index]:
+                x_values.append(float(point[0]))
+                y_values.append(float(point[1]))
+        elif data[index]['type']=="C":
+            for point in  points[index]:
+                x_values.append(float(point[0]))
+                y_values.append(float(point[1])-float(point[2]))
         minX=min(x_values)
         maxX=max(x_values)
         meanX=(minX+maxX)/2.0
