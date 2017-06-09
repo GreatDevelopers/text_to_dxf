@@ -3,4 +3,5 @@
 *.pyc
 !samples/*.dxf
 !samples/*.txt
+\#*
 
