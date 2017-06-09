@@ -22,7 +22,7 @@ end_angle=360
 num_parts=360
 r=20
 temp=(end_angle - start_angle)/num_parts
-print "Cardioid,1,3"
+print "L,Cardioid,1,3"
 for i in range(0,num_parts):
     x=r*(2*cos(radians(start_angle + i*temp)) - cos(2*radians(start_angle + i*temp)))
     y=r*(2*sin(radians(start_angle + i*temp)) - sin(2*radians(start_angle + i*temp)))

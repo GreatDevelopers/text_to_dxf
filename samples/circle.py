@@ -22,7 +22,7 @@ end_angle=360
 num_parts=360
 r=20
 temp=(end_angle - start_angle)/num_parts
-print "Circle with radius ",r,",1,3"
+print "L,Circle with radius ",r,",1,3"
 for i in range(0,num_parts):
     x=r*cos(radians(start_angle + i*temp))
     y=r*sin(radians(start_angle + i*temp))

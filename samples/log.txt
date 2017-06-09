@@ -1,4 +1,4 @@
-Logarithmic Curve,1,3
+L,Logarithmic Curve,1,3
 1 , 0.0
 2 , 13.8629436112
 3 , 21.9722457734

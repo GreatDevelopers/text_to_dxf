@@ -26,7 +26,7 @@ for x in range(start_x,end_x+1):
     y=sqrt(4*a*x)
     print x,",",y
 '''
-print "Logarithmic Curve,1,3"
+print "L,Logarithmic Curve,1,3"
 for x in range(start_x,end_x+1):
     y=a*log(x);
     print x,",",y

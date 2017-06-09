@@ -22,7 +22,7 @@ end_angle=360
 num_parts=360
 r=80
 temp=(end_angle - start_angle)/num_parts
-print "Sine Curve,1,2"
+print "L,Sine Curve,1,2"
 for i in range(0,num_parts):
     current_angle=start_angle + i*temp
     y=r*sin(radians(current_angle))
@@ -33,7 +33,7 @@ for i in range(0,num_parts):
 
 print end_angle,",",y1
 
-print "\nCosine Curve,1,3"
+print "\nL,Cosine Curve,1,3"
 #start_angle=-520
 #end_angle=-160
 temp=(end_angle - start_angle)/num_parts

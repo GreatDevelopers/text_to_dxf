@@ -22,7 +22,7 @@ end_angle=360
 num_parts=360
 a=200
 b=100
-print "Eclipse,1,3"
+print "L,Eclipse,1,3"
 temp=(end_angle - start_angle)/num_parts
 for i in range(0,num_parts+1):
     x=a*cos(radians(start_angle + i*temp))

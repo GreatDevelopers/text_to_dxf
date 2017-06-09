@@ -20,12 +20,12 @@ from math import *
 start_x=0
 end_x=500
 a=10
-print ",1,2"
+print "L,,1,2"
 for x in range(start_x,end_x+1):
     y=sqrt(4*a*x)
     print x,",",y
 
-print "\nParabolic Curve,1,2"
+print "\nL,Parabolic Curve,1,2"
 for x in range(start_x,end_x+1):
     y=copysign(sqrt(4*a*x),-1);
     print x,",",y

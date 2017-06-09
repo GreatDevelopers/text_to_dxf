@@ -23,7 +23,7 @@ num_parts=360
 a=2
 n=3
 temp=(end_angle - start_angle)/num_parts
-print "Epispiral Curve,1,3"
+print "L,Epispiral Curve,1,3"
 for i in range(0,num_parts):
     theta=start_angle + i*temp
     r=a*(1/(float(cos(n*radians(theta)))))

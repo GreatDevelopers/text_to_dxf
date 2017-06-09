@@ -1,4 +1,4 @@
-Exponential Curve,1,3
+L,Exponential Curve,1,3
 0 , 0.01
 1 , 0.0271828182846
 2 , 0.0738905609893
