@@ -25,7 +25,7 @@
 from data_file import *
 from include.functions import *
 from include.file_open import *
-
+from math import *
 # Defining common used variables.
 
 points=[]
@@ -111,6 +111,11 @@ for line in lines:
     elif data[index]['type']=="C":
         r=float(line_data[r_col])
         points[index].append([x,y,r])
+    elif data[index]['type']=="A":
+        sa=float(line_data[s_col])
+        ea=float(line_data[e_col])
+        r=float(line_data[r_col])
+        points[index].append([x,y,r,sa,ea])
     
 # End of main loop
 
@@ -138,6 +143,18 @@ for line_points in points:
                 draw_circle(object_id,[x,y],r,data[index]['layer'],out_file)
                 object_id+=1
             i+=1
+
+    elif data[index]['type']=="A":
+        while i<len(line_points):
+            x=line_points[i][0]
+            y=line_points[i][1]
+            r=line_points[i][2]
+            s=line_points[i][3]
+            e=line_points[i][4]
+            if data[index]['show_line']=="1":
+                draw_arc(object_id,[x,y],r,s,e,data[index]['layer'],out_file)
+                object_id+=1
+            i+=1
     index+=1  
 
 # Following loop draws text if given by user in first line    
@@ -149,14 +166,103 @@ for line_data in data:
     else:
         x_values=[]
         y_values=[]
-        if data[index]['type']=="L":
+        
+        if data[index]['type']=="L": # text for Lines
             for point in  points[index]:
                 x_values.append(float(point[0]))
                 y_values.append(float(point[1]))
-        elif data[index]['type']=="C":
+        
+        elif data[index]['type']=="C": # text for Circles
             for point in  points[index]:
                 x_values.append(float(point[0]))
                 y_values.append(float(point[1])-float(point[2]))
+        
+        elif data[index]['type']=="A": # text for Arcs
+            for point in  points[index]:
+                x=float(point[0])
+                y=float(point[1])
+                radius=float(point[2])
+                st_angle=float(point[3])
+                x1=radius*cos(radians(st_angle)) + x
+                y1=radius*sin(radians(st_angle)) + y
+                end_angle=float(point[4])
+                x2=radius*cos(radians(end_angle)) + x
+                y2=radius*sin(radians(end_angle)) + y
+                print "\n",x,y,radius,st_angle,x1,y1,end_angle,x2,y2
+
+                if(st_angle > end_angle):
+                    print "s>e"
+                    if((0<=st_angle<=90 and 0<=end_angle<=90) or
+                       (90<=st_angle<=180 and 90<=end_angle<=180) or
+                       (180<=st_angle<=270 and 180<=end_angle<=270) or
+                       (270<=st_angle<=360 and 270<=end_angle<=360)):
+                        finalX = x
+                        finalY = y-radius
+                        print "cond1-4"
+                    elif(90<=st_angle<=180 and 0<=end_angle<=90):
+                        finalX = x
+                        finalY = y-radius
+                        print "cond5"
+                    elif(180<=st_angle<=270 and 90<=end_angle<=180):
+                        finalX = (min([x1,x2])+(x+radius))/2
+                        finalY = y-radius
+                        print "cond6"
+                    elif(270<=st_angle<=360 and 180<=end_angle<=270):
+                        finalX = x
+                        finalY = min([y1,y2])
+                        print "cond7"
+                    elif(270<=st_angle<=360 and 0<=end_angle<=90):
+                        finalX = (min([x1,x2])+(x+radius))/2
+                        finalY = y1
+                        print "cond8"
+                    elif(180<=st_angle<=270 and 0<=end_angle<=90):
+                        finalX = (x1+(x+radius))/2
+                        print "y:",y," r:",radius
+                        finalY = y-radius
+                        print "cond9"
+                    elif(270<=st_angle<=360 and 90<=end_angle<=180):
+                        finalX = ((x+radius)+x2)/2
+                        finalY = y1
+                        print "cond10"
+                else:
+                    print "s<=e"
+                    if((0<=st_angle<=90 and 0<=end_angle<=90) or
+                       (90<=st_angle<=180 and 90<=end_angle<=180) or
+                       (180<=st_angle<=270 and 180<=end_angle<=270) or
+                       (270<=st_angle<=360 and 270<=end_angle<=360)):
+                        finalX = (x1+x2)/2
+                        finalY = min([y1,y2])
+                        print "cond1-4"
+                    elif(90<=end_angle<=180 and 0<=st_angle<=90):
+                        finalX = (x1+x2)/2
+                        finalY = min([y1,y2])
+                        print "cond5"
+                    elif(180<=end_angle<=270 and 90<=st_angle<=180):
+                        finalX = (max([x1,x2])+(x-radius))/2
+                        finalY = y2
+                        print "cond6"
+                    elif(270<=end_angle<=360 and 180<=st_angle<=270):
+                        finalX = (x1+x2)/2
+                        finalY = y-radius
+                        print "cond7"
+                    elif(270<=end_angle<=360 and 0<=st_angle<=90):
+                        finalX = (max([x1,x2])+(x-radius))/2
+                        finalY = y-radius
+                        print "cond8"
+                    elif(180<=end_angle<=270 and 0<=st_angle<=90):
+                        finalX = (x1+(x-radius))/2
+                        finalY = y2
+                        print "cond9"
+                    elif(270<=end_angle<=360 and 90<=st_angle<=180):
+                        finalX = ((x-radius)+x2)/2
+                        finalY = y-radius
+                        print "cond10"
+                print(finalX, finalY)
+                x_values.append(finalX)
+                y_values.append(finalY)
+
+        print "x_values:",x_values
+        print "y_values:",y_values
         minX=min(x_values)
         maxX=max(x_values)
         meanX=(minX+maxX)/2.0

@@ -41,3 +41,9 @@ def draw_circle(ob_id,point,radius,layer,w_file):
     w_file.write("CIRCLE\n5\n" + str(ob_id) + "\n100\nAcDbEntity\n100\n")
     w_file.write("AcDbCircle\n8\n"+layer+"\n62\n256\n370\n-1\n6\nByLayer\n10\n")
     w_file.write(str(point[0]) + "\n20\n" +str(point[1]) + "\n40\n" +str(radius)+ "\n0\n")
+
+def draw_arc(ob_id,point,radius,s_angle,e_angle,layer,w_file):
+    w_file.write("ARC\n5\n" + str(ob_id) + "\n100\nAcDbEntity\n8\n")
+    w_file.write(str(layer) + "\n6\nByLayer\n62\n256\n370\n-1\n100\nAcDbCircle\n10\n")
+    w_file.write(str(point[0]) + "\n20\n" + str(point[1]) + "\n40\n" + str(radius) + "\n100\n")
+    w_file.write("AcDbArc\n50\n" + str(s_angle) + "\n51\n" + str(e_angle) + "\n0\n")

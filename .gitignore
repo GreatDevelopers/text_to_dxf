@@ -4,4 +4,4 @@
 !samples/*.dxf
 !samples/*.txt
 \#*
-
+*.dxf~

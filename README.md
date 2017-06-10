@@ -1,13 +1,14 @@
 text_to_dxf README:
 --------------------------
 
-This software converts the specifications to draw lines and circles into 
-.dxf format. You just need to specify co-ordinates of points of figures. 
-Program will automatically join all the points (with lines) or draw a circle 
-if specified to draw figure. You can use combination of points to draw many 
-type of figures such as triangle, quadrilateral, polygon etc. Also you can 
-draw as many figures as you want using only one input file.   
-Please see section "Input File Format" below for input file specification. 
+This software converts the specifications to draw figures including lines, 
+circles and arcs into .dxf format. You just need to specify co-ordinates 
+of points and some parameters like radius, angles etc and the program will
+automatically draw the figure and generate the dxf file. You can use 
+combination of points to draw many type of figures such as triangle, 
+quadrilateral, polygon etc. Also you can draw as many figures as you want 
+using only one input file.   
+ Please see section "Input File Format" below for input file specification. 
 If you export spreadsheet as input file then use "Enter" (Newline) as line
 separator. Lines in input file which do not have valid (numeric) data at 
 required columns would be skipped while processing.   
@@ -77,7 +78,8 @@ Here,
 type of figure -  
 L to draw lines between provided coordinates  
 C to draw circles with provided coordinates
- 
+A to draw arcs with provided coordinates  
+
 Figure description -  
 text shown at botton of figure.  
 Text drawn is bottom centric to the point whose x co-ordinate is mean of 
@@ -106,7 +108,13 @@ x and y coordinates of the point respectively.
 In case of 'C' type, x and y are taken as co-ordinates 
 of center of circle and z is taken as radius. Example: 2,4,10 
 where 2 and 4 are the co-ordinates of center and 10 is the radius
-of circle.
+of circle.  
+In case of 'A' type, format is x,y,r,sa,ea where  
+x: x-coordinate of center of circle  
+y: y-coordinate of center of circle  
+r: radius of circle  
+sa: starting angle of arc  
+ea: ending angle of arc  
                      
 
 Note:   Figure specifications need to be separated by Empty line.
