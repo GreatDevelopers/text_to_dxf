@@ -77,7 +77,7 @@ Details:
 Here,  
 type of figure -  
 L to draw lines between provided coordinates  
-C to draw circles with provided coordinates
+C to draw circles with provided coordinates  
 A to draw arcs with provided coordinates  
 
 Figure description -  
@@ -101,15 +101,15 @@ in any order i.e x,y,z or y,x,z etc. But sequence should
 be same for all figures. Also you need to mention 
 the co-ordinates order in the data_file.py. Please
 note that z co-ordinate is not used in the program
-so you can give only x and y co-ordinates  
-In case of 'L' type, x and y are taken as co-ordinates 
+so you can give only x and y co-ordinates.  
+- In case of 'L' type, x and y are taken as co-ordinates 
 of a point of line. Example: 2,4 where 2 and 4 are the 
 x and y coordinates of the point respectively.  
-In case of 'C' type, x and y are taken as co-ordinates 
+- In case of 'C' type, x and y are taken as co-ordinates 
 of center of circle and z is taken as radius. Example: 2,4,10 
 where 2 and 4 are the co-ordinates of center and 10 is the radius
 of circle.  
-In case of 'A' type, format is x,y,r,sa,ea where  
+- In case of 'A' type, format is x,y,r,sa,ea where  
 x: x-coordinate of center of circle  
 y: y-coordinate of center of circle  
 r: radius of circle  
