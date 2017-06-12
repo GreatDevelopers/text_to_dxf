@@ -174,7 +174,8 @@ for line_data in data:
         
         elif data[index]['type']=="C": # text for Circles
             for point in  points[index]:
-                x_values.append(float(point[0]))
+                x_values.append(float(point[0])-float(point[2]))
+                x_values.append(float(point[0])+float(point[2]))
                 y_values.append(float(point[1])-float(point[2]))
         
         elif data[index]['type']=="A": # text for Arcs
@@ -188,81 +189,79 @@ for line_data in data:
                 end_angle=float(point[4])
                 x2=radius*cos(radians(end_angle)) + x
                 y2=radius*sin(radians(end_angle)) + y
-                print "\n",x,y,radius,st_angle,x1,y1,end_angle,x2,y2
 
                 if(st_angle > end_angle):
-                    print "s>e"
                     if((0<=st_angle<=90 and 0<=end_angle<=90) or
                        (90<=st_angle<=180 and 90<=end_angle<=180) or
                        (180<=st_angle<=270 and 180<=end_angle<=270) or
                        (270<=st_angle<=360 and 270<=end_angle<=360)):
-                        finalX = x
-                        finalY = y-radius
-                        print "cond1-4"
+                        x_values.append(x+radius)
+                        x_values.append(x-radius)
+                        y_values.append(y-radius)
                     elif(90<=st_angle<=180 and 0<=end_angle<=90):
-                        finalX = x
-                        finalY = y-radius
-                        print "cond5"
+                        x_values.append(x+radius)
+                        x_values.append(x-radius)
+                        y_values.append(y-radius)
                     elif(180<=st_angle<=270 and 90<=end_angle<=180):
-                        finalX = (min([x1,x2])+(x+radius))/2
-                        finalY = y-radius
-                        print "cond6"
+                        x_values.append(x1)
+                        x_values.append(x2)
+                        x_values.append(x+radius)
+                        y_values.append(y-radius)
                     elif(270<=st_angle<=360 and 180<=end_angle<=270):
-                        finalX = x
-                        finalY = min([y1,y2])
-                        print "cond7"
+                        x_values.append(x+radius)
+                        x_values.append(x-radius)
+                        y_values.append(y1)
+                        y_values.append(y2)
                     elif(270<=st_angle<=360 and 0<=end_angle<=90):
-                        finalX = (min([x1,x2])+(x+radius))/2
-                        finalY = y1
-                        print "cond8"
+                        x_values.append(x+radius)
+                        x_values.append(x1)
+                        x_values.append(x2)
+                        y_values.append(y1)
                     elif(180<=st_angle<=270 and 0<=end_angle<=90):
-                        finalX = (x1+(x+radius))/2
-                        print "y:",y," r:",radius
-                        finalY = y-radius
-                        print "cond9"
+                        x_values.append(x+radius)
+                        x_values.append(x1)
+                        y_values.append(y-radius)
                     elif(270<=st_angle<=360 and 90<=end_angle<=180):
-                        finalX = ((x+radius)+x2)/2
-                        finalY = y1
-                        print "cond10"
+                        x_values.append(x+radius)
+                        x_values.append(x2)
+                        y_values.append(y1)
                 else:
-                    print "s<=e"
                     if((0<=st_angle<=90 and 0<=end_angle<=90) or
                        (90<=st_angle<=180 and 90<=end_angle<=180) or
                        (180<=st_angle<=270 and 180<=end_angle<=270) or
                        (270<=st_angle<=360 and 270<=end_angle<=360)):
-                        finalX = (x1+x2)/2
-                        finalY = min([y1,y2])
-                        print "cond1-4"
+                        x_values.append(x1)
+                        x_values.append(x2)
+                        y_values.append(y1)
+                        y_values.append(y2)
                     elif(90<=end_angle<=180 and 0<=st_angle<=90):
-                        finalX = (x1+x2)/2
-                        finalY = min([y1,y2])
-                        print "cond5"
+                        x_values.append(x1)
+                        x_values.append(x2)
+                        y_values.append(y1)
+                        y_values.append(y2)
                     elif(180<=end_angle<=270 and 90<=st_angle<=180):
-                        finalX = (max([x1,x2])+(x-radius))/2
-                        finalY = y2
-                        print "cond6"
+                        x_values.append(x1)
+                        x_values.append(x2)
+                        x_values.append(x-radius)
+                        y_values.append(y2)
                     elif(270<=end_angle<=360 and 180<=st_angle<=270):
-                        finalX = (x1+x2)/2
-                        finalY = y-radius
-                        print "cond7"
+                        x_values.append(x2)
+                        x_values.append(x1)
+                        y_values.append(y-radius)
                     elif(270<=end_angle<=360 and 0<=st_angle<=90):
-                        finalX = (max([x1,x2])+(x-radius))/2
-                        finalY = y-radius
-                        print "cond8"
+                        x_values.append(x2)
+                        x_values.append(x1)
+                        x_values.append(x-radius)
+                        y_values.append(y-radius)
                     elif(180<=end_angle<=270 and 0<=st_angle<=90):
-                        finalX = (x1+(x-radius))/2
-                        finalY = y2
-                        print "cond9"
+                        x_values.append(x1)
+                        x_values.append(x-radius)
+                        y_values.append(y2)
                     elif(270<=end_angle<=360 and 90<=st_angle<=180):
-                        finalX = ((x-radius)+x2)/2
-                        finalY = y-radius
-                        print "cond10"
-                print(finalX, finalY)
-                x_values.append(finalX)
-                y_values.append(finalY)
+                        x_values.append(x2)
+                        x_values.append(x-radius)
+                        y_values.append(y-radius)
 
-        print "x_values:",x_values
-        print "y_values:",y_values
         minX=min(x_values)
         maxX=max(x_values)
         meanX=(minX+maxX)/2.0
