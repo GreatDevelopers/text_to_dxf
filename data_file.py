@@ -26,8 +26,6 @@ scaleX=1                 # Value by which X coordinate is scaled
 
 scaleY=1                 # Value by which Y coordinate is scaled
 
-txt_hght=1               # Text height
-
 txt_sp=5                 # Spacing between lower point and 1st text line
 
 x_col=0                  # X co-ordinate position in input file (starting from 0)

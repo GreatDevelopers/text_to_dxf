@@ -32,6 +32,8 @@ points=[]
 data=[]
 object_id=48
 index=0
+is_same_layer=0 #checks if the layer is already declared
+layer_color=1 #assigns color to each layer, increments with every new layer
 first_line=True
 update_ref=False
 description=False
@@ -41,7 +43,7 @@ Yref_orig=Yref
 
 # Main loop start from here
 
-for line in lines:    
+for line in lines:
     line=line.strip("\n")
     if line=="":        # If line is empty then skip the line
         shift_fac_count+=1
@@ -60,7 +62,8 @@ for line in lines:
                 print "Error in input file: point co-ordinates are not numeric"
                 exit(1)             
     
-    # Store variables specific to line under processing    
+    # Store variables specific to line under processing
+    is_same_layer=0
     if first_line==True and description==True: # if description is given
         first_line=False
         data.append({})
@@ -69,6 +72,14 @@ for line in lines:
         data[index]['text']=line_data[1]
         data[index]['show_line']=line_data[2]
         data[index]['layer']=line_data[3]
+        #checking if layer is already declared
+        for layer in dwg.layers:
+            if layer.dxf.name == data[index]['layer']:
+                is_same_layer = 1
+        #declaring new layer
+        if is_same_layer == 0:
+            dwg.layers.new(name=data[index]['layer'], dxfattribs={'linetype': 'CONTINUOUS', 'color': layer_color})
+            layer_color = layer_color + 1
         description=False
         continue
     elif first_line==True and description==False: # if description is not given
@@ -131,7 +142,7 @@ for line_points in points:
             x2=line_points[i+1][0]
             y2=line_points[i+1][1]
             if data[index]['show_line']=="1":
-                draw_line(object_id,[x1,y1],[x2,y2],data[index]['layer'],out_file)
+                msp.add_line((x1,y1), (x2,y2), dxfattribs={'layer': data[index]['layer']})
                 object_id+=1
             i+=1 
     elif data[index]['type']=="C":
@@ -140,7 +151,7 @@ for line_points in points:
             y=line_points[i][1]
             r=line_points[i][2]
             if data[index]['show_line']=="1":
-                draw_circle(object_id,[x,y],r,data[index]['layer'],out_file)
+                msp.add_circle((x,y), r, dxfattribs={'layer': data[index]['layer']})                
                 object_id+=1
             i+=1
 
@@ -152,7 +163,7 @@ for line_points in points:
             s=line_points[i][3]
             e=line_points[i][4]
             if data[index]['show_line']=="1":
-                draw_arc(object_id,[x,y],r,s,e,data[index]['layer'],out_file)
+                msp.add_arc((x,y), r, s, e, dxfattribs={'layer': data[index]['layer']})                
                 object_id+=1
             i+=1
     index+=1  
@@ -268,7 +279,7 @@ for line_data in data:
         minY=min(y_values)
         Xtxt=meanX
         Ytxt=minY - txt_sp
-        draw_text(object_id,[Xtxt,Ytxt],txt_hght,line_data['text'],line_data['layer'],out_file)
+        msp.add_text(line_data['text'], dxfattribs={'layer': line_data['layer']}).set_pos((Xtxt,Ytxt), align= 'TOP_CENTER')
         object_id+=1
         index+=1
         
