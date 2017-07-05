@@ -23,10 +23,14 @@ REQUIREMENTS:
 ----------------------------
 
 This software is totally written in Python. So Python interpretor should be
-installed correctly in your system. Also be sure that python binary is in your
-system path (to be accessed easily). To test the output of this software any
-CAD software compatible with dxf format should be installed such as LibreCAD,
-AutoCAD, QCAD etc.
+installed correctly in your system. Make sure that python binary is in your
+system path (to be accessed easily). 
+
+This software also uses ezdxf library. To install it, run 
+`pip install ezdxf` or install from [here](https://pypi.python.org/pypi/ezdxf#installation).
+
+To test the output of this software any CAD software compatible with dxf 
+format should be installed such as LibreCAD, AutoCAD, QCAD etc.
 
 
 

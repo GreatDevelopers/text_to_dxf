@@ -16,7 +16,10 @@
 # Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.             #
 #########################################################################
 
-import sys, os.path
+import sys, os.path, ezdxf
+
+dwg = ezdxf.new('R2010')
+msp = dwg.modelspace()
 
 # Checking for validity of commandline arguments
 
@@ -36,20 +39,7 @@ if  os.path.exists(sys.argv[2])==True:
 input_file=sys.argv[1]
 output_file=sys.argv[2]
 
-head_file="include/head"      #header file used internally (not to be changed) 
-foot_file="include/foot"      #footer file used internally (not to be changed)
-
-# Opens various required files
-
+# Opens input file
 in_file=open(input_file, 'r')		
-out_file=open(output_file, 'w')
-hd_file=open(head_file, 'r')
-ft_file=open(foot_file,'r')
-head_data=hd_file.read()
-foot_data=ft_file.read()
-
-# Writing header file to output file
-
-out_file.write(head_data)
 
 lines = in_file.readlines()

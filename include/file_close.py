@@ -19,13 +19,8 @@
 
 from file_open import *
 
-# Write footer file to output file	
-
-out_file.write(foot_data)
-
-# Closes all opened files
-
-out_file.close()
+# Closes opened files
 in_file.close()
-hd_file.close()
-ft_file.close()	
+
+# Saves the output file
+dwg.saveas(output_file)
