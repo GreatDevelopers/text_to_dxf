@@ -32,14 +32,32 @@ points=[]
 data=[]
 object_id=48
 index=0
-is_same_layer=0 #checks if the layer is already declared
-layer_color=1 #assigns color to each layer, increments with every new layer
+is_same_layer=0 # checks if the layer is already declared
+layer_color=1 # assigns color to each layer, increments with every new layer
 first_line=True
 update_ref=False
 description=False
 shift_fac_count=0
 Xref_orig=Xref
 Yref_orig=Yref
+
+#----------------------------------------
+#----------------------------------------
+
+# My sample code
+
+# gives each point's properties
+b = re.findall("\((.*?)\)", line)
+
+# makes every point a tuple in a list
+for x in b:
+    c = tuple(int(y) for y in x.split(","),)
+    result.append(c)
+
+#----------------------------------------
+#----------------------------------------
+
+
 
 # Main loop start from here
 
