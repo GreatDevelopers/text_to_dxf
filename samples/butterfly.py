@@ -22,9 +22,9 @@ end_angle=360
 num_parts=1800
 r=20
 temp=(end_angle - start_angle)/float(num_parts)
-print "L,Butterfly Curve,1,3"
+print "H,Butterfly Curve,1,1"
 for i in range(0,num_parts+1):
     t=radians(start_angle + i*temp)
     x=r*sin(t)*(exp(cos(t)) - 2*cos(4*t) - pow(sin(float(t)/12),5))
     y=r*cos(t)*(exp(cos(t)) - 2*cos(4*t) - pow(sin(float(t)/12),5))
-    print x,",",y
+    print x,",",y,",",0

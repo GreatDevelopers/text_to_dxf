@@ -151,13 +151,20 @@ for line in lines:
         r=float(line_data[r_col])
         points[index].append((x,y,r,sa,ea))
 
-    #Saves coordinates of Polyline
+    # Saves coordinates of Polyline
     elif data[index]['type']=="P":
         sw = float(line_data[sw_col])
         ew = float(line_data[ew_col])
         bulge = float(line_data[bulge_col])
         points[index].append((x,y,sw,ew,bulge))
-    
+
+    # Saves coordinates of Polyline for Hatch
+    elif data[index]['type']=="H":
+        print line_data
+        bulge = float(line_data[hatch_bulge_col])
+        points[index].append((x,y,bulge))
+
+
 # End of main loop
 
 # Following loop draws lines if L is the type or circles if C is the type
@@ -179,7 +186,8 @@ for line_points in points:
             y=line_points[i][1]
             r=line_points[i][2]
             if data[index]['show_line']=="1":
-                msp.add_circle((x,y),r , dxfattribs={'layer': data[index]['layer']})                
+                msp.add_circle((x,y),r , 
+                    dxfattribs={'layer': data[index]['layer']})                
                 object_id+=1
             i+=1
 
@@ -202,9 +210,23 @@ for line_points in points:
                 dxfattribs={'layer': data[index]['layer']})
             object_id+=1
 
+    elif data[index]['type']=="H":
+        if data[index]['show_line']=="1":
+            hatch = msp.add_hatch(color=2, 
+                dxfattribs={'layer': data[index]['layer']})
+            # edit boundary path (context manager)
+            with hatch.edit_boundary() as boundary: 
+                # every boundary path is always a 2D element
+                # vertex format for the polyline path is: (x, y[, bulge])
+                # bulge value 1 = an arc with diameter=10 (= distance to next vertex * bulge value)
+                # bulge value > 0 ... arc is right of line
+                # bulge value < 0 ... arc is left of line
+                boundary.add_polyline_path(line_points, is_closed=1)
+
     index+=1  
 
-#Following loop draws text if given by user in first line    
+
+# Following loop draws text if given by user in first line    
 index=0
 for line_data in data:
     if line_data['text']=="NO TEXT" or line_data['show_line']=="0":
@@ -214,18 +236,21 @@ for line_data in data:
         x_values=[]
         y_values=[]
         
-        if data[index]['type']=="L": # text for Lines
+        # text for Lines
+        if data[index]['type']=="L": 
             for point in  points[index]:
                 x_values.append(float(point[0]))
                 y_values.append(float(point[1]))
         
-        elif data[index]['type']=="C": # text for Circles
+        # text for Circles
+        elif data[index]['type']=="C": 
             for point in  points[index]:
                 x_values.append(float(point[0])-float(point[2]))
                 x_values.append(float(point[0])+float(point[2]))
                 y_values.append(float(point[1])-float(point[2]))
         
-        elif data[index]['type']=="A": # text for Arcs
+        # text for Arcs
+        elif data[index]['type']=="A": 
             for point in  points[index]:
                 x=float(point[0])
                 y=float(point[1])
@@ -308,6 +333,11 @@ for line_data in data:
                         x_values.append(x2)
                         x_values.append(x-radius)
                         y_values.append(y-radius)
+
+        # text for Polyline
+        # elif data[index]['type']=="P": 
+        #     for point in  points[index]:
+
 
         # Calculates the position of text
         if x_values!=[] and y_values!=[]:
