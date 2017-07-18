@@ -36,6 +36,8 @@ e_col=4                  # position of end angle (if A is the type)
 sw_col=2				 # position of start width (if P is the type)
 ew_col=3				 # position of end width (if P is the type)
 bulge_col=4				 # position of bulge (if P is the type)
+hatch_bulge_col=2	     # position of bulge (if H is the type)
+
 
 mode=1                   # 0 to draw figures by taking the co-ordinates values in 
                          # the input file as absolute co-ordinates.
