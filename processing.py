@@ -160,7 +160,6 @@ for line in lines:
 
     # Saves coordinates of Polyline for Hatch
     elif data[index]['type']=="H":
-        print line_data
         bulge = float(line_data[hatch_bulge_col])
         points[index].append((x,y,bulge))
 
@@ -212,7 +211,7 @@ for line_points in points:
 
     elif data[index]['type']=="H":
         if data[index]['show_line']=="1":
-            hatch = msp.add_hatch(color=2, 
+            hatch = msp.add_hatch(color= hatch_color, 
                 dxfattribs={'layer': data[index]['layer']})
             # edit boundary path (context manager)
             with hatch.edit_boundary() as boundary: 

@@ -1,5 +1,5 @@
 999
-last saved by ezdxf 0.8.2 on 2017-07-18 17:12:37
+last saved by ezdxf 0.8.2 on 2017-07-18 18:21:19
   0
 SECTION
   2
@@ -491,11 +491,11 @@ $SKPOLY
   9
 $TDCREATE
  40
-2457953.71708
+2457953.76479
   9
 $TDUPDATE
  40
-2457953.71709
+2457953.7648
   9
 $TDINDWG
  40
@@ -2741,7 +2741,7 @@ AcDbEntity
   8
 1
  62
-2
+5
  67
 0
 100
