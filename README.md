@@ -83,6 +83,8 @@ type of figure -
 L to draw lines between provided coordinates  
 C to draw circles with provided coordinates  
 A to draw arcs with provided coordinates  
+P to draw polyline with provided coordinates
+H to draw hatch with provided coordinates  
 
 Figure description -  
 text shown at botton of figure.  
@@ -106,20 +108,36 @@ be same for all figures. Also you need to mention
 the co-ordinates order in the data_file.py. Please
 note that z co-ordinate is not used in the program
 so you can give only x and y co-ordinates.  
-- In case of 'L' type, x and y are taken as co-ordinates 
-of a point of line. Example: 2,4 where 2 and 4 are the 
-x and y coordinates of the point respectively.  
-- In case of 'C' type, x and y are taken as co-ordinates 
-of center of circle and z is taken as radius. Example: 2,4,10 
-where 2 and 4 are the co-ordinates of center and 10 is the radius
-of circle.  
-- In case of 'A' type, format is x,y,r,sa,ea where  
+
+- In case of 'L' type (line), format is x,y where  
+x: x-coordinate of the point  
+y: y-coordinate of the point  
+
+- In case of 'C' type (circle), format is x,y,r where  
+x: x-coordinate of center of circle  
+y: y-coordinate of center of circle  
+r: radius of circle  
+
+- In case of 'A' type (arc), format is x,y,r,sa,ea where  
 x: x-coordinate of center of circle  
 y: y-coordinate of center of circle  
 r: radius of circle  
 sa: starting angle of arc  
 ea: ending angle of arc  
-                     
+
+- In case of 'P' type (polyline), format is x,y,sw,ew,bulge where  
+x: x-coordinate of the point in polyline  
+y: y-coordinate of the point in polyline  
+sw: start width of the line starting from this point  
+ew: end width of the line starting from this point  
+bulge: arc from this point to next point having diameter = length_of_line * bulge 
+(positive for downward and negative for upward)  
+
+- In case of 'H' type (hatch in polyline), format is x,y,bulge where  
+x: x-coordinate of the point in polyline  
+y: y-coordinate of the point in polyline  
+bulge: arc from this point to next point having diameter = length_of_line * bulge 
+(positive for downward and negative for upward)                     
 
 Note:   Figure specifications need to be separated by Empty line.
 
