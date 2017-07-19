@@ -30,9 +30,15 @@ txt_sp=5                 # Spacing between lower point and 1st text line
 
 x_col=0                  # X co-ordinate position in input file (starting from 0)
 y_col=1                  # Y co-ordinate position in input file (starting from 0)
-r_col=2                  # position of radius in input file (if C is the type)
+r_col=2                  # position of radius in input file (if C or A is the type)
 s_col=3                  # position of start angle (if A is the type)
 e_col=4                  # position of end angle (if A is the type)
+sw_col=2				 # position of start width (if P is the type)
+ew_col=3				 # position of end width (if P is the type)
+bulge_col=4				 # position of bulge (if P is the type)
+hatch_bulge_col=2	     # position of bulge (if H is the type)
+
+hatch_color=5            # color of hatch
 
 mode=1                   # 0 to draw figures by taking the co-ordinates values in 
                          # the input file as absolute co-ordinates.

@@ -32,8 +32,8 @@ points=[]
 data=[]
 object_id=48
 index=0
-is_same_layer=0 #checks if the layer is already declared
-layer_color=1 #assigns color to each layer, increments with every new layer
+is_same_layer=0 # checks if the layer is already declared
+layer_color=1 # assigns color to each layer, increments with every new layer
 first_line=True
 update_ref=False
 description=False
@@ -41,55 +41,73 @@ shift_fac_count=0
 Xref_orig=Xref
 Yref_orig=Yref
 
+
 # Main loop start from here
 
 for line in lines:
     line=line.strip("\n")
-    if line=="":        # If line is empty then skip the line
+    if line=="":
+        # New layer starts
         shift_fac_count+=1
         index+=1
         first_line=True
         update_ref=True
         continue
+
+    # Picks up the words like group of numbers or characters
     line_data = line.split(col_delm)
+    # Checks the first word in a line
     for value in line_data:
-        if first_line==True: # Check if there is any description in first line or not
+        # Checks if there is any description in first line
+        if first_line==True:
             if is_numeric(value)==False:
                 description=True
                 break
         else:
+            # Checks if there isn't any character in first word in lines 
+            # execpt first line of each paragraph
             if is_numeric(value)==False:
                 print "Error in input file: point co-ordinates are not numeric"
                 exit(1)             
     
-    # Store variables specific to line under processing
+    # Used for checking if layer is same
     is_same_layer=0
-    if first_line==True and description==True: # if description is given
+    
+    # Store variables specific to line under processing
+    if first_line==True:
         first_line=False
+        
+        # Declare another list inside the list
         data.append({})
         points.append([])
-        data[index]['type']=line_data[0]
-        data[index]['text']=line_data[1]
-        data[index]['show_line']=line_data[2]
-        data[index]['layer']=line_data[3]
-        #checking if layer is already declared
-        for layer in dwg.layers:
-            if layer.dxf.name == data[index]['layer']:
-                is_same_layer = 1
-        #declaring new layer
-        if is_same_layer == 0:
-            dwg.layers.new(name=data[index]['layer'], dxfattribs={'linetype': 'CONTINUOUS', 'color': layer_color})
-            layer_color = layer_color + 1
-        description=False
-        continue
-    elif first_line==True and description==False: # if description is not given
-        first_line=False
-        data.append({})
-        points.append([])
-        data[index]['type']="L"  # take line as default
-        data[index]['text']="No TEXT"
-        data[index]['show_line']="1"
-        data[index]['layer']="0"
+        
+        # if description is given
+        if description==True:
+            data[index]['type']=line_data[0]
+            data[index]['text']=line_data[1]
+            data[index]['show_line']=line_data[2]
+            data[index]['layer']=line_data[3]
+            
+            #checking if layer is already declared
+            for layer in dwg.layers:
+                if layer.dxf.name == data[index]['layer']:
+                    is_same_layer = 1
+            
+            #declaring new layer
+            if is_same_layer == 0:
+                dwg.layers.new(name=data[index]['layer'], dxfattribs={
+                    'linetype': 'CONTINUOUS', 'color': layer_color})
+                layer_color = layer_color + 1
+            description=False
+            continue    
+        
+        # if description is not given
+        elif description==False:
+            # takes line as default
+            data[index]['type']="L"
+            data[index]['text']="No TEXT"
+            data[index]['show_line']="1"
+            data[index]['layer']="0"
     
     # Update ref variables if required
     if mode==1 and update_ref==True:
@@ -117,17 +135,35 @@ for line in lines:
         x=(Xref+float(line_data[x_col]))*scaleX
         y=(Yref+float(line_data[y_col]))*scaleY
     
+    # Saves coordinates of line
     if data[index]['type']=="L":
-        points[index].append([x,y])
+        points[index].append((x,y))
+    
+    # Saves coordinates of Circle
     elif data[index]['type']=="C":
         r=float(line_data[r_col])
-        points[index].append([x,y,r])
+        points[index].append((x,y,r))
+    
+    # Saves coordinates of Arc
     elif data[index]['type']=="A":
         sa=float(line_data[s_col])
         ea=float(line_data[e_col])
         r=float(line_data[r_col])
-        points[index].append([x,y,r,sa,ea])
-    
+        points[index].append((x,y,r,sa,ea))
+
+    # Saves coordinates of Polyline
+    elif data[index]['type']=="P":
+        sw = float(line_data[sw_col])
+        ew = float(line_data[ew_col])
+        bulge = float(line_data[bulge_col])
+        points[index].append((x,y,sw,ew,bulge))
+
+    # Saves coordinates of Polyline for Hatch
+    elif data[index]['type']=="H":
+        bulge = float(line_data[hatch_bulge_col])
+        points[index].append((x,y,bulge))
+
+
 # End of main loop
 
 # Following loop draws lines if L is the type or circles if C is the type
@@ -137,21 +173,20 @@ for line_points in points:
     i=0
     if data[index]['type']=="L":
         while i<(len(line_points)-1):
-            x1=line_points[i][0]
-            y1=line_points[i][1]
-            x2=line_points[i+1][0]
-            y2=line_points[i+1][1]
             if data[index]['show_line']=="1":
-                msp.add_line((x1,y1), (x2,y2), dxfattribs={'layer': data[index]['layer']})
+                msp.add_line(line_points[i], line_points[i+1], 
+                    dxfattribs={'layer': data[index]['layer']})
                 object_id+=1
             i+=1 
+    
     elif data[index]['type']=="C":
         while i<len(line_points):
             x=line_points[i][0]
             y=line_points[i][1]
             r=line_points[i][2]
             if data[index]['show_line']=="1":
-                msp.add_circle((x,y), r, dxfattribs={'layer': data[index]['layer']})                
+                msp.add_circle((x,y),r , 
+                    dxfattribs={'layer': data[index]['layer']})                
                 object_id+=1
             i+=1
 
@@ -163,10 +198,32 @@ for line_points in points:
             s=line_points[i][3]
             e=line_points[i][4]
             if data[index]['show_line']=="1":
-                msp.add_arc((x,y), r, s, e, dxfattribs={'layer': data[index]['layer']})                
+                msp.add_arc((x,y), r, s, e, 
+                    dxfattribs={'layer': data[index]['layer']})                
                 object_id+=1
             i+=1
+    
+    elif data[index]['type']=="P":
+        if data[index]['show_line']=="1":
+            msp.add_lwpolyline(line_points, 
+                dxfattribs={'layer': data[index]['layer']})
+            object_id+=1
+
+    elif data[index]['type']=="H":
+        if data[index]['show_line']=="1":
+            hatch = msp.add_hatch(color= hatch_color, 
+                dxfattribs={'layer': data[index]['layer']})
+            # edit boundary path (context manager)
+            with hatch.edit_boundary() as boundary: 
+                # every boundary path is always a 2D element
+                # vertex format for the polyline path is: (x, y[, bulge])
+                # bulge value 1 = an arc with diameter=10 (= distance to next vertex * bulge value)
+                # bulge value > 0 ... arc is right of line
+                # bulge value < 0 ... arc is left of line
+                boundary.add_polyline_path(line_points, is_closed=1)
+
     index+=1  
+
 
 # Following loop draws text if given by user in first line    
 index=0
@@ -178,18 +235,21 @@ for line_data in data:
         x_values=[]
         y_values=[]
         
-        if data[index]['type']=="L": # text for Lines
+        # text for Lines
+        if data[index]['type']=="L": 
             for point in  points[index]:
                 x_values.append(float(point[0]))
                 y_values.append(float(point[1]))
         
-        elif data[index]['type']=="C": # text for Circles
+        # text for Circles
+        elif data[index]['type']=="C": 
             for point in  points[index]:
                 x_values.append(float(point[0])-float(point[2]))
                 x_values.append(float(point[0])+float(point[2]))
                 y_values.append(float(point[1])-float(point[2]))
         
-        elif data[index]['type']=="A": # text for Arcs
+        # text for Arcs
+        elif data[index]['type']=="A": 
             for point in  points[index]:
                 x=float(point[0])
                 y=float(point[1])
@@ -273,15 +333,23 @@ for line_data in data:
                         x_values.append(x-radius)
                         y_values.append(y-radius)
 
-        minX=min(x_values)
-        maxX=max(x_values)
-        meanX=(minX+maxX)/2.0
-        minY=min(y_values)
-        Xtxt=meanX
-        Ytxt=minY - txt_sp
-        msp.add_text(line_data['text'], dxfattribs={'layer': line_data['layer']}).set_pos((Xtxt,Ytxt), align= 'TOP_CENTER')
-        object_id+=1
-        index+=1
+        # text for Polyline
+        # elif data[index]['type']=="P": 
+        #     for point in  points[index]:
+
+
+        # Calculates the position of text
+        if x_values!=[] and y_values!=[]:
+            minX=min(x_values)
+            maxX=max(x_values)
+            meanX=(minX+maxX)/2.0
+            minY=min(y_values)
+            Xtxt=meanX
+            Ytxt=minY - txt_sp
+            msp.add_text(line_data['text'], dxfattribs={'layer': 
+                line_data['layer']}).set_pos((Xtxt,Ytxt), align= 'TOP_CENTER')
+            object_id+=1
+            index+=1
         
 if sys.argv[0]=="processing.py":
     from include.file_close import *
